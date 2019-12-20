@@ -1,0 +1,85 @@
+{% extends "base-site.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <h2 class="page-title">Responses</span></h2>
+    <div class="row">
+        <div class="col-md-12">
+            <section class="widget">
+                <div class="body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="hidden-xs">#</th>
+                            <th>ID</th>
+                            <th>Age</th>
+                            <th class="hidden-xs">Gender</th>
+                            <th class="hidden-xs">Grade</th>
+                            <th class="hidden-xs">Race</th>
+                            <th class="hidden-xs">Hispanic</th>
+                            <th class="hidden-xs">4-H Member</th>
+                            <th class="hidden-xs">Question 1</th>
+                            <th class="hidden-xs">Answer 1</th>
+                            <th class="hidden-xs">Question 2</th>
+                            <th class="hidden-xs">Answer 2</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for user_response in user_responses %}
+                            <tr>
+                                <td class="hidden-xs">{{user_response.id}}</td>
+                                <td class="hidden-xs">{{user_response.username}}</td>
+                                <td class="hidden-xs">{{user_response.age}}</td>
+                                <td class="hidden-xs">{{user_response.gender}}</td>
+                                <td class="hidden-xs">{{user_response.grade}}</td>
+                                <td class="hidden-xs">{{user_response.race}}</td>
+                                <td class="hidden-xs">{{user_response.isHispanic}}</td>
+                                <td class="hidden-xs">{{user_response.is4HMember}}</td>
+                                <td class="hidden-xs">{{user_response.question_1}}</td>
+                                <td class="hidden-xs">{{user_response.answer_1}}</td>
+                                <td class="hidden-xs">{{user_response.question_2}}</td>
+                                <td class="hidden-xs">{{user_response.answer_2}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                    <div class="clearfix">
+                        <div class="pull-right">
+                            <button class="btn btn-default btn-sm" onclick="downloadCSV()">
+                                Download as CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="text/javascript">
+        var content = "{{csvContent|safe}}";
+        function downloadCSV(){
+            let csvContent = "data:text/csv;charset=utf-8," + content;
+            var encodedUri = encodeURI(csvContent);
+            window.open(encodedUri);
+        }
+    </script>
+
+    <!-- page specific libs -->
+    <script src="/static/assets/lib/jquery.sparkline/index.js"></script>
+
+    <!-- page application js -->
+    <script src="/static/assets/js/tables-static.js"></script>
+
+{% endblock javascripts %}

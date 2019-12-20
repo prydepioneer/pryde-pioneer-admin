@@ -4,6 +4,7 @@ License: MIT
 Copyright (c) 2019 - present AppSeed.us
 """
 
+from json import loads
 from flask import jsonify, render_template, redirect, request, url_for
 from flask_login import (
     current_user,
@@ -15,7 +16,7 @@ from flask_login import (
 from app import db, login_manager
 from app.base import blueprint
 from app.base.forms import LoginForm, CreateAccountForm
-from app.base.models import User
+from app.base.models import User, Response, MobileUser
 
 from app.base.util import verify_pass
 
@@ -87,13 +88,63 @@ def logout():
     logout_user()
     return redirect(url_for('base_blueprint.login'))
 
-@blueprint.route('/shutdown')
-def shutdown():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
-    return 'Server shutting down...'
+@blueprint.route('/get_token')
+def get_token():
+    user = MobileUser()
+    db.session.add(user)
+    db.session.commit()
+    token = user.encode_auth_token()
+    return jsonify({
+        "token": token
+    })
+
+@blueprint.route('/refresh_token')
+def refresh_token():
+    try:
+        token = request.headers['authorization'].split()[1] # authorization: bearer <token_here>
+        id = MobileUser.decode_auth_token(token)
+        if id < 0:
+            return "error"
+        else:
+            user = MobileUser.query.filter_by(id=id).first()
+            if user:
+                return user.encode_auth_token() if not user.isBanned else "error"
+            else:
+                return "error"
+    except:
+        return "error"
+
+@blueprint.route('/response', methods=['POST'])
+def create_response():
+    response = Response(**request.get_json())
+    db.session.add(response)
+    db.session.commit()
+    return jsonify({
+        'data': True
+    })
+    # try:
+    #     token = request.headers['Authorization'].split()[1] # authorization: bearer <token_here>
+    #     id = MobileUser.decode_auth_token(token)
+    #     print(id)
+    #     if id < 0:
+    #         return "error1"
+    #     else:
+    #         print(id)
+    #         user = MobileUser.query.filter_by(id=id).first()
+    #         if user:
+    #             if not user.isBanned:
+    #                 user.sent += 1
+    #                 response = Response(**request.get_json())
+    #                 db.session.add(user)
+    #                 db.session.add(response)
+    #                 db.session.commit()
+    #                 return "success"
+    #             else:
+    #                 return "error2"
+    #         else:
+    #             return "error3"
+    # except:
+    #     return "error4"
 
 ## Errors
 
