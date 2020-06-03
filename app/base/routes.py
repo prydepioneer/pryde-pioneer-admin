@@ -13,7 +13,7 @@ from flask_login import (
     logout_user
 )
 
-from app import db, login_manager
+from app import db, login_manager, Verified
 from app.base import blueprint
 from app.base.forms import LoginForm, CreateAccountForm
 from app.base.models import User, Response, MobileUser
@@ -72,6 +72,10 @@ def create_user():
         user = User.query.filter_by(email=email).first()
         if user:
             return render_template( 'login/register.html', msg='Email already registered', form=create_account_form)
+
+        verified = Verified.query.filter_by(email=email).first()
+        if not verified:
+            return render_template( 'login/register.html', msg='Email not verified', form=create_account_form)
 
         # else we can create the user
         user = User(**request.form)

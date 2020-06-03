@@ -66,6 +66,8 @@ class Response(db.Model):
     question_2 = Column(String)
     answer_1 = Column(String)
     answer_2 = Column(String)
+    country = Column(String)
+    programType = Column(String)
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

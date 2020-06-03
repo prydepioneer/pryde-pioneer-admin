@@ -23401,3 +23401,13 @@ table.table thead .sorting_desc_disabled {
     margin-left: 91.6666666667%;
   }
 }
+
+.responsetable {
+  table-layout: fixed;
+}
+
+.usercell {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
