@@ -64,6 +64,7 @@
                 </div>
             </section>
         </div>
+        <meta id="csvContent" info="{{csvContent}}" />
     </div>
     
 
@@ -72,7 +73,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
     <script type="text/javascript">
-        var content = "{{csvContent|safe}}";
+        var content = document.querySelector("meta#csvContent").getAttribute("info");
         function downloadCSV(){
             let csvContent = "data:text/csv;charset=utf-8," + content;
             var encodedUri = encodeURI(csvContent);
