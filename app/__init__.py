@@ -7,12 +7,21 @@ Copyright (c) 2019 - present AppSeed.us
 from flask import Flask, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import event, Integer, String, Column
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger, StreamHandler
-from os import path
+from os import path, environ
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+class Verified(db.Model):
+    __tablename__ = 'Verified'
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True)
+
+    def __init__(self, email):
+        setattr(self, 'email', email)
 
 def register_extensions(app):
     db.init_app(app)
@@ -24,6 +33,12 @@ def register_blueprints(app):
         app.register_blueprint(module.blueprint)
 
 def configure_database(app):
+    @event.listens_for(Verified.__table__, 'after_create')
+    def insert_initial_values(*args, **kwargs):
+        unparsedAdminEmails = environ.get('ADMIN_EMAILS', '')
+        verifiedAdminEmails = [Verified(email.strip()) for email in unparsedAdminEmails.split(',')]
+        db.session.add_all(verifiedAdminEmails)
+        db.session.commit()
 
     @app.before_first_request
     def initialize_database():
