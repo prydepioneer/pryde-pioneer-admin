@@ -6,7 +6,7 @@ COPY run.py gunicorn.py requirements-sqlite.txt config.py ./
 COPY app app
 COPY migrations migrations
 
-RUN pip install -r requirements-sqlite.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 5000
 CMD ["gunicorn", "--config", "gunicorn.py", "run:app"]
