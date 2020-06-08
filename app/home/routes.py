@@ -34,7 +34,7 @@ def route_template(template):
             csvValues = [str(res) for res in allResponses]
             if len(allResponses) > 0:
                 csvValues.insert(0, allResponses[0].getHeaders())
-            newLineSeperator = r"\n"
+            newLineSeperator = "\n"
             csvString = newLineSeperator.join(csvValues)
 
             return render_template(template + '.html', user_responses=allResponses, csvContent=csvString)
