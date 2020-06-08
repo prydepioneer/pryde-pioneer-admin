@@ -56,9 +56,11 @@
                     </table>
                     <div class="clearfix">
                         <div class="pull-right">
-                            <button class="btn btn-default btn-sm" onclick="downloadCSV()">
-                                Download as CSV
-                            </button>
+                            <a id="csvButton">
+                                <button class="btn btn-default btn-sm">
+                                    Download as CSV
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -73,7 +75,11 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
     <script type="text/javascript">
-        var content = document.querySelector("meta#csvContent").getAttribute("info");
+        let content = document.querySelector("meta#csvContent").getAttribute("info");
+        let csvContent = "data:text/csv;charset=utf-8," + encodeURI(content);
+        let csvLink = document.querySelector("a#csvButton");
+        csvLink.href = csvContent;
+        csvLink.download = "data.csv";
         function downloadCSV(){
             let csvContent = "data:text/csv;charset=utf-8," + encodeURI(content);
             console.log(csvContent);
