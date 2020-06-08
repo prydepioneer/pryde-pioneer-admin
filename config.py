@@ -37,7 +37,7 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_DURATION = 3600
 
     # PostgreSQL database
-    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL'. '')
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL', '')
 
 
 class DebugConfig(Config):
