@@ -104,12 +104,3 @@ Visit `http://localhost:5000` in your browser. The app should be up & running.
 - [Flask Dashboard](https://admin-dashboards.com/tags/flask-dashboard) - Index provided by **Admin-Dashboards.com**
 
 <br />
-
-## License
-
-@MIT
-
-<br />
-
----
-[Flask Dashboard Light Blue](https://appseed.us/admin-dashboards/flask-dashboard-light-blue) - provided by **AppSeed**
